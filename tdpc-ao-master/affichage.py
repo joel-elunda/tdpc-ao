@@ -9,6 +9,9 @@
 #                     affiche les taux de participation d'un étudiant à tous ses cours
 # 4. afficher_tdp_all_stud_au_cours(valeurs):
 #                     affiche le taux de participation de tous les étudiants à un cous donnée
+# 5. afficher_tdp_etud_quelques_cours(valeurs):
+#                     affiche le taux de participation d'un etudiant à un ensemble des cours passés en paramètres
+#                          
 ###########################################################################################################
 
 from list_data import *                         # importation du module list_data (il contient des fonctions dont on aura besoin)
@@ -46,7 +49,7 @@ def afficher_tdp_etud_au_cours(valeurs):
 
     tab_pres = pres_etud_au_cours(acro,mat)     # le tableau des présence de l'étudiant au cours
     tdpc     = tdpc_etud(tab_pres)              # calculs du taux de participation 
-    finaliser_affi_tdpc_etud(tdpc,mat,acro)# et pour finir finalisons l'affichage
+    finaliser_affi_tdpc_etud(tdpc,mat,acro)     # et pour finir finalisons l'affichage
 
 # ============= TAUX DE PARTICIPAT D'UN ETUDIANT A TOUS SES COURS===================================
 def afficher_tdp_etud_all_cours(valeurs):
@@ -108,4 +111,33 @@ def afficher_tdp_all_stud_au_cours(valeurs):
         print(text,end='')                      # on affiche la ligne et on supprime le passage à la lige
 
     print("Vous avez toutes les informations!") # juste pour rire, 
+
+
+# ========= TAUX DE PARTICIPATION D'UN ETUDIANT A UN ENSEMBLE DES COURS INDIQUES EN PARAMETRES ==========================
+
+def afficher_tdp_etud_quelques_cours(valeurs):
+    """affiche le taux de participation d'un etudiant à un ensemble des cours passés en paramètres"""
+    msg_erreur = "Valeure incorrectes: matricule et liste acronymes atendus"
+
+    if len(valeurs) <= 2:
+        print(msg_erreur)
+        exit()
+
+    mat, acros = valeurs[0], valeurs[1:]
+    etud = find_element(f_etudiant(),mat,0)     # trouve l'étudiant dont le matricule est mat  
+          
+    entete = """
+        Taux de Participation aux Cours de %s 
+    Etudiant:  %s   Mat: %s   
+    --------------------------------------------------------
+    """                                             # chaine paramétrée
+    entet_block = "    %s%sEnseignants\n    %s"     # à placer à la tête de la liste
+                                                    
+    print(entete % (etud[2],etud[1],etud[0]))       # on affiche l'entête et on affichage l'entête                                                 
+    print(entet_block % ( b("TDPC",10), b("Cours Dispensés"), b('',50,'-'))) # de la liste   
+
+    for acro in acros:
+        tab_pres = pres_etud_au_cours(acros,mat)
+        tdpc     = tdpc_etud(tab_pres) 
+        finaliser_affi_tdpc_etud(tdpc,mat,acro)
 

@@ -23,7 +23,9 @@ def exe_cmd(arg_valeurs):
         elif arg == '-te*':             # ou encore le taux de participation de tous les étudiant dans un cours
             afficher_tdp_etud_all_cours(valeurs)       
         elif arg == '-t**':             # ou encore le taux de participation de tous les étudiant dans un cours
-            afficher_tdp_all_stud_au_cours(valeurs)       
+            afficher_tdp_all_stud_au_cours(valeurs)
+        elif arg == '-te**': #  Afficher les TDPC d'un étudiant à un ensemble de cours iniqués en paramètre
+            afficher_tdp_etud_quelques_cours(valeurs)
         elif arg == '-h':               # ou encore afficher de l'aide
             arg_help()     
         else:                           # si aucun argument ne correspond
@@ -68,6 +70,11 @@ def arg_help():
     -te* : afficher le taux de participation d'un étudiant à tous ses cours
             et le tableau de valeur est supposé contenir
             mat      : le matricule de l'étudiant concerné
+
+    -te** : afficher le taux de participation d'un étudiant à un ensemble de cours 
+            iniqués en paramètre
+            mat      : le matricule de l'étudiant
+            acros     : les acronymes des cours concernés
 
     -t** : afficher le taux de participation de tous les étudiant à un cours
             et le tableau de valeur est supposé contenir
