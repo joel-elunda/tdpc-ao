@@ -72,9 +72,9 @@
 
 	---------------------- AMELIORATIONS ATTENDUES ---------------------------
 						-----------------------------
-	+ Afficher les TDPC d'un étudiant à un ensemble de cours iniqués en paramètre
+	+ Afficher les TDPC d'un étudiant à un ensemble de cours iniqués en paramètre (Done)
 	+ Considérer un étudiant comme présent si son absence a été justifiée
-	+ Afficher uniquement les TDPC des étudiant avec un TDP <= 75%
+	+ Afficher uniquement les TDPC des étudiants avec un TDP <= 75% (Done)
 	+ Créer une commande qui permettra de juistifier une absence
 
 

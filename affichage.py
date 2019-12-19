@@ -117,7 +117,7 @@ def afficher_tdp_all_stud_au_cours(valeurs):
 
 def afficher_tdp_etud_quelques_cours(valeurs):
     """affiche le taux de participation d'un etudiant à un ensemble des cours passés en paramètres"""
-    msg_erreur = "Valeure incorrectes: matricule et liste acronymes atendus"
+    msg_erreur = "Valeures incorrectes: matricule et liste acronymes atendus"
 
     if len(valeurs) <= 2:
         print(msg_erreur)
@@ -141,3 +141,51 @@ def afficher_tdp_etud_quelques_cours(valeurs):
         tdpc     = tdpc_etud(tab_pres) 
         finaliser_affi_tdpc_etud(tdpc,mat,acro)
 
+
+# ========= TAUX DE PARTICIPATION DES ETUDIANTS AYANT UN TAUX INFERIEUR A 75% ==========================
+
+def afficher_tdp_inferieur_75(valeurs):
+    """affiche uniquement les TDPC des étudiants avec un TDP <= 75%"""
+    msg_erreur = "Valeure incorrecte: acronyme attendus"
+
+    if len(valeurs) == 0:
+        print(msg_erreur)
+        exit()
+
+    entete = """
+    Taux de Participation au Cours de : %s,  
+    Promotion : %s 
+    Enseignant: %s
+    """                                         # entête principal de la liste
+    entete_block = """
+
+    -------------------------------------------------------
+        N°    Mat.     TDP.   Etudiants
+    -------------------------------------------------------"""# entete d'un block à reprendre après chaque 25 ligne
+    ligne = """
+        %s.  %s   %s   %s"""                    # le format que prendront les ligne à afficher
+    # ==================================================================================
+   
+    acro = valeurs[0]
+    etudiants = loard_data(f_etudiant())        # chargement de tous les étudiants
+    
+    for ie,etud in enumerate(etudiants):        # parcourt tous les étudiant un-à-un
+        mat = etud[0]                           # matricule de l'étudiant
+        tab_pres = pres_etud_au_cours(acro,mat) # les présences de l'étudiant au cours
+        tdpc     = tdpc_etud(tab_pres) 
+        etud.append(tdpc_etud(tab_pres))        # le taux de participation de l'étudiant est ajouté à l'étudiant
+        etudiants[ie] = etud
+        
+    for ie, etud in enumerate(etudiants):
+        if etud[-1] >= '75.0%' or etud[-1] == '100.%' :
+            etudiants.remove(etud)
+
+    cr = find_element(f_cours(),acro,0)         # trouve le cours dont l'acronyme est acro
+    print(entete % (cr[1], cr[2], cr[3]))       # on affiche l'entete de la liste
+                                                
+    for i,etud in enumerate(etudiants):
+        
+        if (i%25 == 0):                         # on n'affiche l'entête du block que si on est à 
+            print(entete_block, end='')         # un indice multiple de 25, à par 0, évidemment
+        text = ligne % ((i+1),etud[0],etud[-1],etud[1]) # on construit la ligne
+        print(text,end='')                      # on affiche la ligne et on supprime le passage à la lige
