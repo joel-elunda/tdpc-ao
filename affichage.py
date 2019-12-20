@@ -16,6 +16,15 @@
 
 from list_data import *                         # importation du module list_data (il contient des fonctions dont on aura besoin)
 
+def rewrite_the_file(tab,path):
+    """sérialise le tableau tab et l'écrit dans le fichier dont le chemin est indiqué en paramètre"""
+    chaine = str(tab).replace('], [',"],\n [")      # sérialisation du tableau et ajout de passage à la ligne à la fin de chaque ligne
+    fichier= open(path,"w")                         # ouverture du fichier en écriture (ce qui a pour effet d'écraser tous son contenu)
+    fichier.write(chaine)                           # écriture de chaine (tableau sérialisé) dans le fichier
+    fichier.close()                                 # fermeture du fichier
+
+
+
 # ============= AFFICHER LES PRESENCES D'UN ETUDIANT A TOUTES LES SEANCES D'UN COURS ====================
 def afficher_pres_etud_au_cours(valeurs):
     """ afficher les présence d'un étudiant à toutes les séance d'un cours donné """
@@ -172,7 +181,6 @@ def afficher_tdp_inferieur_75(valeurs):
     for ie,etud in enumerate(etudiants):        # parcourt tous les étudiant un-à-un
         mat = etud[0]                           # matricule de l'étudiant
         tab_pres = pres_etud_au_cours(acro,mat) # les présences de l'étudiant au cours
-        tdpc     = tdpc_etud(tab_pres) 
         etud.append(tdpc_etud(tab_pres))        # le taux de participation de l'étudiant est ajouté à l'étudiant
         etudiants[ie] = etud
         
@@ -184,8 +192,48 @@ def afficher_tdp_inferieur_75(valeurs):
     print(entete % (cr[1], cr[2], cr[3]))       # on affiche l'entete de la liste
                                                 
     for i,etud in enumerate(etudiants):
-        
         if (i%25 == 0):                         # on n'affiche l'entête du block que si on est à 
             print(entete_block, end='')         # un indice multiple de 25, à par 0, évidemment
         text = ligne % ((i+1),etud[0],etud[-1],etud[1]) # on construit la ligne
         print(text,end='')                      # on affiche la ligne et on supprime le passage à la lige
+
+
+
+
+# ========= UNE COMMANDE QUI PERMETTRA DE JUSTIFIER UNE ABSENCE ==========================
+
+def justifier_absence_etud_au_cours(valeurs):
+    """permet de faire une justification de l'absence d'un etudiant a une seance d'un cours"""
+    msg_erreur = "Valeure incorrecte: mat, acro, date seance et justification attendus"
+
+    if len(valeurs) != 5:
+        print(msg_erreur)
+        exit()
+    
+    mat, acro, date_seance, am_pm, justify = valeurs
+    path = f_presence(acro,date_seance,am_pm)
+    seance = loard_data(path)
+
+    for i, pres_etud in enumerate(seance):
+        if pres_etud[0] == mat:
+            pres_etud.remove(pres_etud[-1])
+            pres_etud.remove(pres_etud[-1])
+            pres_etud.append('P')
+            pres_etud.append(justify)
+
+            seance[i] = pres_etud
+    
+    rewrite_the_file(seance,path)
+
+    entete = """
+        Justification d'absence au cours de: %s
+        Seance du: %s 
+        Note: %s
+        Etudiant:  %s   Mat: %s   
+        --------------------------------------------------------"""
+    cr = find_element(f_cours(),acro,0)
+    etud = find_element(f_etudiant(), mat, 0)
+
+    print(entete % (cr[1], date_seance, justify, etud[1], etud[0])) 
+    
+    

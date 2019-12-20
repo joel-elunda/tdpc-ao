@@ -28,6 +28,8 @@ def exe_cmd(arg_valeurs):
             afficher_tdp_etud_quelques_cours(valeurs)
         elif arg == '-ti':              # afficher uniquement les taux de pariticipation des étudiants avec un TDP <= 75%
             afficher_tdp_inferieur_75(valeurs)
+        elif arg == '-ja':              # une commande qui permettra de juistifier une absence
+            justifier_absence_etud_au_cours(valeurs)
         elif arg == '-h':               # ou encore afficher de l'aide
             arg_help()     
         else:                           # si aucun argument ne correspond
@@ -75,6 +77,13 @@ def arg_help():
 
     -ti :  afficher uniquement les TDPC des étudiant avec un TDP <= 75%
             acro     : l'acronyme du cours concerné
+
+    -ja : une commande qui permet de justifier l'absence d'un étudiant a un cours
+            mat      : le matricule de l'étudiant
+            acro     : l'acronyme du cours concerné
+            date     : la date de la seance raté
+            am_pm    : [AM | PM] (Avant ou apres-midi)
+            justify  : la note de justification
 
     -te** : afficher le taux de participation d'un étudiant à un ensemble de cours 
             iniqués en paramètre
